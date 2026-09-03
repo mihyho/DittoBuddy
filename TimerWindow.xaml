@@ -1,0 +1,19 @@
+<Window x:Class="DittoBuddy.TimerWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="타이머" Width="220" SizeToContent="Height"
+        WindowStartupLocation="CenterScreen" Topmost="True" ResizeMode="NoResize">
+    <StackPanel Margin="12" HorizontalAlignment="Center">
+        <StackPanel x:Name="InputPanel" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,8">
+            <TextBox x:Name="MinutesBox" Width="52" Text="5" TextAlignment="Center"/>
+            <TextBlock Text="분" VerticalAlignment="Center" Margin="4,0"/>
+            <TextBox x:Name="SecondsBox" Width="52" Text="0" TextAlignment="Center"/>
+            <TextBlock Text="초" VerticalAlignment="Center" Margin="4,0"/>
+        </StackPanel>
+        <TextBlock x:Name="TimeText" Text="05:00" FontSize="32" FontWeight="Bold"
+                   HorizontalAlignment="Center" Margin="0,0,0,12"/>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+            <Button x:Name="StartCancelButton" Content="시작" Width="60" Margin="4" Click="StartCancelButton_Click"/>
+        </StackPanel>
+    </StackPanel>
+</Window>

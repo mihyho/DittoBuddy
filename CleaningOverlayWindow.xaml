@@ -1,0 +1,37 @@
+<Window x:Class="DittoBuddy.CleaningOverlayWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="청소 모드" SizeToContent="WidthAndHeight"
+        WindowStyle="None" AllowsTransparency="True" Background="Transparent"
+        Topmost="True" ShowInTaskbar="False" WindowStartupLocation="Manual"
+        ResizeMode="NoResize">
+    <Border CornerRadius="24" Padding="30,22">
+        <Border.Background>
+            <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                <GradientStop Color="#F2DED6F2" Offset="0"/>
+                <GradientStop Color="#F5CBC0EC" Offset="1"/>
+            </LinearGradientBrush>
+        </Border.Background>
+        <Border.Effect>
+            <DropShadowEffect BlurRadius="28" ShadowDepth="8" Direction="270" Opacity="0.22" Color="#6B5B95"/>
+        </Border.Effect>
+        <Grid>
+            <Border CornerRadius="24" BorderThickness="1.2">
+                <Border.BorderBrush>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                        <GradientStop Color="#CCFFFFFF" Offset="0"/>
+                        <GradientStop Color="#26FFFFFF" Offset="0.35"/>
+                        <GradientStop Color="#14FFFFFF" Offset="1"/>
+                    </LinearGradientBrush>
+                </Border.BorderBrush>
+                <StackPanel HorizontalAlignment="Center">
+                    <TextBlock Text="🧹 청소 모드" FontSize="24" FontWeight="SemiBold" Foreground="#241F30"
+                               HorizontalAlignment="Center"/>
+                    <TextBlock Text="스페이스바를 누르면 해제됩니다" FontSize="13" Foreground="#5A5268"
+                               HorizontalAlignment="Center" Margin="0,4,0,14"/>
+                    <StackPanel x:Name="Dots" Orientation="Horizontal" HorizontalAlignment="Center"/>
+                </StackPanel>
+            </Border>
+        </Grid>
+    </Border>
+</Window>
