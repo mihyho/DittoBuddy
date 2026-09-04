@@ -57,6 +57,9 @@
                     </LinearGradientBrush>
                 </Rectangle.Fill>
             </Rectangle>
+            <Button x:Name="CloseButton" Content="&#xE711;" FontFamily="Segoe MDL2 Assets" FontSize="10"
+                    Foreground="#241F30" Width="22" Height="22" HorizontalAlignment="Right" VerticalAlignment="Top"
+                    Margin="0,6,6,0" Style="{StaticResource GlassIconButtonStyle}" Click="CloseButton_Click"/>
         </Grid>
     </Border>
 </Window>

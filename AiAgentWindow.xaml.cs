@@ -15,7 +15,6 @@ public partial class AiAgentWindow : Window
 {
     private readonly Rect _characterScreenRect;
     private bool _closingAnimated;
-    private bool _hasActivated;
 
     public AiAgentWindow(Rect characterScreenRect)
     {
@@ -23,11 +22,9 @@ public partial class AiAgentWindow : Window
         _characterScreenRect = characterScreenRect;
         ContentRendered += (_, _) => { PositionNearCharacter(); PlayGrowIn(); };
         Loaded += (_, _) => QuestionBox.Focus();
-        // Deactivated can fire once, spuriously, before the window has really finished becoming
-        // active right after Show() — closing on that would mean it never gets a chance to be used.
-        Activated += (_, _) => _hasActivated = true;
-        Deactivated += (_, _) => { if (_hasActivated) Close(); }; // click anywhere else to dismiss
     }
+
+    private void CloseButton_Click(object sender, RoutedEventArgs e) => Close();
 
     private void PositionNearCharacter()
     {
