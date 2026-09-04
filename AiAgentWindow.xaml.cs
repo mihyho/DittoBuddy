@@ -1,6 +1,8 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
@@ -14,6 +16,7 @@ namespace DittoBuddy;
 public partial class AiAgentWindow : Window
 {
     private readonly Rect _characterScreenRect;
+    private readonly List<(string Question, string Answer)> _history = new();
     private bool _closingAnimated;
 
     public AiAgentWindow(Rect characterScreenRect)
@@ -88,14 +91,34 @@ public partial class AiAgentWindow : Window
         string question = QuestionBox.Text.Trim();
         if (question.Length == 0) return;
 
+        QuestionBox.Clear();
         AskButton.IsEnabled = false;
-        AnswerText.Text = "생각 중...";
-        AnswerText.Text = await AskClaudeAsync(question);
+        AnswerText.Text = RenderHistory(question, "생각 중...");
+        AnswerScroll.ScrollToEnd();
+
+        string answer = await AskClaudeAsync(_history, question);
+        _history.Add((question, answer));
+        AnswerText.Text = RenderHistory();
+        AnswerScroll.ScrollToEnd();
         AskButton.IsEnabled = true;
     }
 
-    private static async Task<string> AskClaudeAsync(string question)
+    // Shows past turns plus, while a request is in flight, the pending question/placeholder.
+    private string RenderHistory(string? pendingQuestion = null, string? pendingAnswer = null)
     {
+        var turns = _history.Select(h => $"나: {h.Question}\n{h.Answer}");
+        if (pendingQuestion != null) turns = turns.Append($"나: {pendingQuestion}\n{pendingAnswer}");
+        return string.Join("\n\n", turns);
+    }
+
+    // Sends prior Q&A as context so follow-up questions ("이어진 질문") work — each CLI call is a
+    // fresh process, so continuity has to come from the prompt text, not a persistent session.
+    private static async Task<string> AskClaudeAsync(List<(string Question, string Answer)> history, string question)
+    {
+        string prompt = history.Count == 0
+            ? question
+            : string.Join("\n\n", history.Select(h => $"User: {h.Question}\nAssistant: {h.Answer}")) + $"\n\nUser: {question}";
+
         var psi = new ProcessStartInfo
         {
             FileName = "claude",
@@ -107,7 +130,7 @@ public partial class AiAgentWindow : Window
             CreateNoWindow = true,
         };
         psi.ArgumentList.Add("-p");
-        psi.ArgumentList.Add(question);
+        psi.ArgumentList.Add(prompt);
         psi.ArgumentList.Add("--allowedTools");
         psi.ArgumentList.Add("");
 
