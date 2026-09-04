@@ -60,6 +60,7 @@ public partial class MainWindow : Window
 
     private System.Windows.Forms.NotifyIcon? _trayIcon;
     private CleaningOverlayWindow? _cleaningOverlay;
+    private MirrorWindow? _mirrorWindow;
     private readonly ReminderScheduler _reminders = new();
 
     private void SetupTrayIcon()
@@ -258,7 +259,7 @@ public partial class MainWindow : Window
             menu.Items.Add(MakeItem("타이머", Icons.Hourglass, () => new TimerWindow().Show()));
             menu.Items.Add(MakeItem("리마인더 설정...", Icons.SpeechBubble, () => { new ReminderSettingsWindow().ShowDialog(); _reminders.Reload(); }));
             menu.Items.Add(new Separator());
-            menu.Items.Add(MakeItem("메모장 열기", Icons.Notepad, () => Process.Start("notepad.exe")));
+            menu.Items.Add(MakeItem("거울", Icons.Mirror, OpenMirror));
             menu.Items.Add(MakeItem("계산기 열기", Icons.Calculator, () => Process.Start("calc.exe")));
             menu.Items.Add(MakeItem("웹 검색 열기", Icons.Search, () => Process.Start(new ProcessStartInfo("https://www.google.com") { UseShellExecute = true })));
             menu.Items.Add(new Separator());
@@ -314,6 +315,20 @@ public partial class MainWindow : Window
             return new[] { new CustomPopupPlacement(new System.Windows.Point(rect.Left - target.X, rect.Top - target.Y), PopupPrimaryAxis.None) };
         };
         menu.IsOpen = true;
+    }
+
+    private void OpenMirror()
+    {
+        if (_mirrorWindow == null || !_mirrorWindow.IsLoaded)
+        {
+            _mirrorWindow = new MirrorWindow();
+            _mirrorWindow.Closed += (_, _) => _mirrorWindow = null;
+            _mirrorWindow.Show();
+        }
+        else
+        {
+            _mirrorWindow.Activate();
+        }
     }
 
     private static object MakeIconContent(ShortcutEntry entry)
