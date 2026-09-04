@@ -15,12 +15,16 @@
         <Border.Effect>
             <DropShadowEffect BlurRadius="28" ShadowDepth="8" Direction="270" Opacity="0.22" Color="#6B5B95"/>
         </Border.Effect>
-        <StackPanel HorizontalAlignment="Center">
-            <TextBlock Text="🧹 청소 모드" FontSize="24" FontWeight="SemiBold" Foreground="#241F30"
-                       HorizontalAlignment="Center"/>
-            <TextBlock Text="스페이스바를 누르면 해제됩니다" FontSize="13" Foreground="#5A5268"
-                       HorizontalAlignment="Center" Margin="0,4,0,14"/>
-            <StackPanel x:Name="Dots" Orientation="Horizontal" HorizontalAlignment="Center"/>
-        </StackPanel>
+        <!-- Clip goes on this inner border, not the outer one above: the outer carries the drop
+             shadow, and clipping it would cut the shadow off at its own edge. -->
+        <Border CornerRadius="24" ClipToBounds="True">
+            <StackPanel HorizontalAlignment="Center">
+                <TextBlock Text="🧹 청소 모드" FontSize="24" FontWeight="SemiBold" Foreground="#241F30"
+                           HorizontalAlignment="Center"/>
+                <TextBlock Text="스페이스바를 누르면 해제됩니다" FontSize="13" Foreground="#5A5268"
+                           HorizontalAlignment="Center" Margin="0,4,0,14"/>
+                <StackPanel x:Name="Dots" Orientation="Horizontal" HorizontalAlignment="Center"/>
+            </StackPanel>
+        </Border>
     </Border>
 </Window>

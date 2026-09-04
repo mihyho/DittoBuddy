@@ -27,7 +27,7 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
-                        <Border CornerRadius="12" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}">
+                        <Border CornerRadius="12" ClipToBounds="True" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}">
                             <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" TextElement.Foreground="{TemplateBinding Foreground}"/>
                         </Border>
                         <ControlTemplate.Triggers>
@@ -55,7 +55,7 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="TextBox">
-                        <Border CornerRadius="10" Background="{TemplateBinding Background}"
+                        <Border CornerRadius="10" ClipToBounds="True" Background="{TemplateBinding Background}"
                                 BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
                             <ScrollViewer x:Name="PART_ContentHost" Margin="{TemplateBinding Padding}" VerticalAlignment="Center"/>
                         </Border>
@@ -72,7 +72,7 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="ListBox">
-                        <Border CornerRadius="10" Background="{TemplateBinding Background}"
+                        <Border CornerRadius="10" ClipToBounds="True" Background="{TemplateBinding Background}"
                                 BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
                             <ScrollViewer Padding="{TemplateBinding Padding}">
                                 <ItemsPresenter/>
@@ -88,7 +88,7 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="ListBoxItem">
-                        <Border x:Name="Bd" CornerRadius="8" Margin="2" Padding="{TemplateBinding Padding}" Background="Transparent">
+                        <Border x:Name="Bd" CornerRadius="8" ClipToBounds="True" Margin="2" Padding="{TemplateBinding Padding}" Background="Transparent">
                             <ContentPresenter/>
                         </Border>
                         <ControlTemplate.Triggers>
@@ -130,6 +130,8 @@
                         <!-- Ditto "transforms" into the menu: pops up from the character with a squash/stretch,
                              and the header pillow reuses its face, so the popup itself reads as the character's
                              new shape rather than an unrelated box. -->
+                        <!-- ClipToBounds goes on the inner border below, not here: this outer one carries
+                             the drop shadow, and clipping it would cut the shadow off at its own edge. -->
                         <Border x:Name="PopBorder" CornerRadius="24" Padding="{TemplateBinding Padding}"
                                 RenderTransformOrigin="0.5,1" Opacity="0">
                             <Border.RenderTransform>
@@ -147,7 +149,7 @@
                             </Border.Effect>
                             <Grid>
                                 <!-- specular: bright hairline on the top edge, fading down -->
-                                <Border CornerRadius="24" BorderThickness="1.2">
+                                <Border CornerRadius="24" ClipToBounds="True" BorderThickness="1.2">
                                     <Border.BorderBrush>
                                         <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
                                             <GradientStop Color="#CCFFFFFF" Offset="0"/>
@@ -217,7 +219,7 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="MenuItem">
-                        <Border x:Name="Bd" CornerRadius="16" Margin="2,3" Padding="{TemplateBinding Padding}"
+                        <Border x:Name="Bd" CornerRadius="16" ClipToBounds="True" Margin="2,3" Padding="{TemplateBinding Padding}"
                                 Background="#20FFFFFF" BorderBrush="#26FFFFFF" BorderThickness="1">
                             <ContentPresenter ContentSource="Header" VerticalAlignment="Center" TextElement.Foreground="{TemplateBinding Foreground}"/>
                         </Border>
@@ -260,7 +262,7 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
-                        <Border CornerRadius="10" Background="{TemplateBinding Background}">
+                        <Border CornerRadius="10" ClipToBounds="True" Background="{TemplateBinding Background}">
                             <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
                         <ControlTemplate.Triggers>

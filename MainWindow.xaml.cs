@@ -61,6 +61,7 @@ public partial class MainWindow : Window
     private System.Windows.Forms.NotifyIcon? _trayIcon;
     private CleaningOverlayWindow? _cleaningOverlay;
     private MirrorWindow? _mirrorWindow;
+    private AiAgentWindow? _aiAgentWindow;
     private readonly ReminderScheduler _reminders = new();
 
     private void SetupTrayIcon()
@@ -261,7 +262,7 @@ public partial class MainWindow : Window
             menu.Items.Add(new Separator());
             menu.Items.Add(MakeItem("거울", Icons.Mirror, OpenMirror));
             menu.Items.Add(MakeItem("계산기 열기", Icons.Calculator, () => Process.Start("calc.exe")));
-            menu.Items.Add(MakeItem("웹 검색 열기", Icons.Search, () => Process.Start(new ProcessStartInfo("https://www.google.com") { UseShellExecute = true })));
+            menu.Items.Add(MakeItem("AI 에이전트", Icons.Sparkle, OpenAiAgent));
             menu.Items.Add(new Separator());
             menu.Items.Add(MakeItem("종료", Icons.Close, () => Application.Current.Shutdown()));
 
@@ -329,6 +330,22 @@ public partial class MainWindow : Window
         {
             _mirrorWindow.Activate();
         }
+    }
+
+    private void OpenAiAgent()
+    {
+        if (_aiAgentWindow != null && _aiAgentWindow.IsLoaded)
+        {
+            _aiAgentWindow.Activate();
+            return;
+        }
+
+        var target = PointToScreenDip(new System.Windows.Point(0, 0));
+        var characterRect = new Rect(target.X, target.Y, RootCanvas.ActualWidth, RootCanvas.ActualHeight);
+
+        _aiAgentWindow = new AiAgentWindow(characterRect);
+        _aiAgentWindow.Closed += (_, _) => _aiAgentWindow = null;
+        _aiAgentWindow.Show();
     }
 
     private static object MakeIconContent(ShortcutEntry entry)

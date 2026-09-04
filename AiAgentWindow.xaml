@@ -1,0 +1,59 @@
+<Window x:Class="DittoBuddy.AiAgentWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="AI 에이전트" SizeToContent="WidthAndHeight"
+        WindowStyle="None" AllowsTransparency="True" Background="Transparent"
+        Topmost="True" ShowInTaskbar="False" WindowStartupLocation="Manual"
+        ResizeMode="NoResize">
+    <!-- Same glass card look as the popup menu, so this reads as "the character transformed
+         into the AI window" rather than an unrelated dialog. The face sits as a small badge in
+         the top-left corner (an edge, not a centered header) like a chat-bubble avatar. -->
+    <Border x:Name="RootBorder" CornerRadius="24" Padding="18" Width="260"
+            RenderTransformOrigin="0.5,1" Opacity="0">
+        <Border.RenderTransform>
+            <ScaleTransform ScaleX="0.85" ScaleY="0.35"/>
+        </Border.RenderTransform>
+        <Border.Background>
+            <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                <GradientStop Color="#F2DED6F2" Offset="0"/>
+                <GradientStop Color="#F5CBC0EC" Offset="1"/>
+            </LinearGradientBrush>
+        </Border.Background>
+        <Border.Effect>
+            <DropShadowEffect BlurRadius="28" ShadowDepth="8" Direction="270" Opacity="0.22" Color="#6B5B95"/>
+        </Border.Effect>
+        <Grid>
+            <!-- ClipToBounds goes here, not on RootBorder above: that one carries the drop
+                 shadow, and clipping it would cut the shadow off at its own edge. -->
+            <Border CornerRadius="24" ClipToBounds="True" BorderThickness="1.2">
+                <Border.BorderBrush>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                        <GradientStop Color="#CCFFFFFF" Offset="0"/>
+                        <GradientStop Color="#26FFFFFF" Offset="0.35"/>
+                        <GradientStop Color="#14FFFFFF" Offset="1"/>
+                    </LinearGradientBrush>
+                </Border.BorderBrush>
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                        <Border CornerRadius="16" Width="32" Height="32" Background="#33FFFFFF">
+                            <Image Source="Assets/ditto_face.png" Stretch="Uniform" Margin="5"/>
+                        </Border>
+                        <TextBlock Text="AI 에이전트" FontSize="14" FontWeight="SemiBold" Foreground="#241F30"
+                                   VerticalAlignment="Center" Margin="8,0,0,0"/>
+                    </StackPanel>
+
+                    <TextBox x:Name="QuestionBox" Height="34" VerticalContentAlignment="Center"
+                             Padding="8,0" Margin="0,0,0,8" KeyDown="QuestionBox_KeyDown"/>
+                    <Button x:Name="AskButton" Content="물어보기" Click="AskButton_Click" Margin="0,0,0,10"/>
+
+                    <Border CornerRadius="14" Background="#22FFFFFF" Padding="10" MinHeight="60">
+                        <ScrollViewer MaxHeight="200" VerticalScrollBarVisibility="Auto">
+                            <TextBlock x:Name="AnswerText" TextWrapping="Wrap" FontSize="13" Foreground="#332B40"
+                                       Text="무엇이든 물어보세요."/>
+                        </ScrollViewer>
+                    </Border>
+                </StackPanel>
+            </Border>
+        </Grid>
+    </Border>
+</Window>
