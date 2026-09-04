@@ -23,16 +23,11 @@
             <DropShadowEffect BlurRadius="28" ShadowDepth="8" Direction="270" Opacity="0.22" Color="#6B5B95"/>
         </Border.Effect>
         <Grid>
-            <!-- ClipToBounds goes here, not on RootBorder above: that one carries the drop
-                 shadow, and clipping it would cut the shadow off at its own edge. -->
-            <Border CornerRadius="24" ClipToBounds="True" BorderThickness="1.2">
-                <Border.BorderBrush>
-                    <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-                        <GradientStop Color="#CCFFFFFF" Offset="0"/>
-                        <GradientStop Color="#26FFFFFF" Offset="0.35"/>
-                        <GradientStop Color="#14FFFFFF" Offset="1"/>
-                    </LinearGradientBrush>
-                </Border.BorderBrush>
+            <!-- Plain clip, no border stroke: a gradient BorderBrush paints all four sides, and a
+                 top-to-bottom gradient run down the LEFT/RIGHT edges reads as a stray straight
+                 line rather than a highlight — that was the "white square line" bug. The top
+                 gloss rectangle below gives the same glassy sheen without that side effect. -->
+            <Border CornerRadius="24" ClipToBounds="True">
                 <StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
                         <Border CornerRadius="16" Width="32" Height="32" Background="#33FFFFFF">
@@ -54,6 +49,14 @@
                     </Border>
                 </StackPanel>
             </Border>
+            <Rectangle Height="26" VerticalAlignment="Top" RadiusX="24" RadiusY="24" IsHitTestVisible="False">
+                <Rectangle.Fill>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                        <GradientStop Color="#14FFFFFF" Offset="0"/>
+                        <GradientStop Color="#00FFFFFF" Offset="1"/>
+                    </LinearGradientBrush>
+                </Rectangle.Fill>
+            </Rectangle>
         </Grid>
     </Border>
 </Window>

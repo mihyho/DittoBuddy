@@ -6,6 +6,8 @@ namespace DittoBuddy;
 public partial class ReminderSettingsWindow : Window
 {
     private readonly ReminderSettings _settings;
+    private bool _suppressAutoClose;
+    private bool _hasActivated;
 
     public ReminderSettingsWindow()
     {
@@ -16,6 +18,10 @@ public partial class ReminderSettingsWindow : Window
         WorkEndBox.Text = _settings.WorkEnd;
         RefreshList();
         Closing += (_, _) => SaveWorkSchedule();
+        // Deactivated can fire once, spuriously, before the window has really finished becoming
+        // active right after Show() — closing on that would mean it never gets a chance to be used.
+        Activated += (_, _) => _hasActivated = true;
+        Deactivated += (_, _) => { if (_hasActivated && !_suppressAutoClose) Close(); }; // click away to dismiss
     }
 
     private void RefreshList()
@@ -28,7 +34,9 @@ public partial class ReminderSettingsWindow : Window
     {
         if (!TimeSpan.TryParse(NewTimeBox.Text, out _))
         {
+            _suppressAutoClose = true;
             MessageBox.Show(this, "시간 형식은 HH:mm 이어야 합니다.", "DittoBuddy");
+            _suppressAutoClose = false;
             return;
         }
         if (string.IsNullOrWhiteSpace(NewTextBox.Text)) return;

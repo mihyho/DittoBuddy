@@ -9,11 +9,17 @@ public partial class TimerWindow : Window
 {
     private readonly DispatcherTimer _timer = new() { Interval = TimeSpan.FromSeconds(1) };
     private TimeSpan _remaining;
+    private bool _suppressAutoClose;
+    private bool _hasActivated;
 
     public TimerWindow()
     {
         InitializeComponent();
         _timer.Tick += Timer_Tick;
+        // Deactivated can fire once, spuriously, before the window has really finished becoming
+        // active right after Show() — closing on that would mean it never gets a chance to be used.
+        Activated += (_, _) => _hasActivated = true;
+        Deactivated += (_, _) => { if (_hasActivated && !_suppressAutoClose) Close(); }; // click away to dismiss
     }
 
     private void StartCancelButton_Click(object sender, RoutedEventArgs e)
@@ -47,7 +53,9 @@ public partial class TimerWindow : Window
             StartCancelButton.Content = "시작";
             TimeText.Text = "00:00";
             SystemSounds.Exclamation.Play();
+            _suppressAutoClose = true;
             MessageBox.Show(this, "타이머가 끝났습니다!", "DittoBuddy", MessageBoxButton.OK, MessageBoxImage.Information);
+            _suppressAutoClose = false;
             return;
         }
         UpdateDisplay();

@@ -9,11 +9,16 @@ public partial class StopwatchWindow : Window
 {
     private readonly Stopwatch _stopwatch = new();
     private readonly DispatcherTimer _timer = new() { Interval = TimeSpan.FromMilliseconds(50) };
+    private bool _hasActivated;
 
     public StopwatchWindow()
     {
         InitializeComponent();
         _timer.Tick += (_, _) => UpdateDisplay();
+        // Deactivated can fire once, spuriously, before the window has really finished becoming
+        // active right after Show() — closing on that would mean it never gets a chance to be used.
+        Activated += (_, _) => _hasActivated = true;
+        Deactivated += (_, _) => { if (_hasActivated) Close(); }; // click anywhere else to dismiss
     }
 
     private void UpdateDisplay()

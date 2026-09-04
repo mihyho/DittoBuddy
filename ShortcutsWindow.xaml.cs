@@ -8,12 +8,18 @@ namespace DittoBuddy;
 public partial class ShortcutsWindow : Window
 {
     private readonly List<ShortcutEntry> _entries;
+    private bool _suppressAutoClose;
+    private bool _hasActivated;
 
     public ShortcutsWindow()
     {
         InitializeComponent();
         _entries = ShortcutStore.Load();
         ShortcutList.ItemsSource = _entries;
+        // Deactivated can fire once, spuriously, before the window has really finished becoming
+        // active right after Show() — closing on that would mean it never gets a chance to be used.
+        Activated += (_, _) => _hasActivated = true;
+        Deactivated += (_, _) => { if (_hasActivated && !_suppressAutoClose) Close(); }; // click away to dismiss
     }
 
     private void AddButton_Click(object sender, RoutedEventArgs e)
@@ -23,7 +29,10 @@ public partial class ShortcutsWindow : Window
             Title = "바로가기로 등록할 파일 선택",
             Filter = "실행 파일/바로가기 (*.exe;*.lnk)|*.exe;*.lnk|모든 파일 (*.*)|*.*"
         };
-        if (dialog.ShowDialog(this) != true) return;
+        _suppressAutoClose = true;
+        bool picked = dialog.ShowDialog(this) == true;
+        _suppressAutoClose = false;
+        if (!picked) return;
 
         _entries.Add(new ShortcutEntry(Path.GetFileNameWithoutExtension(dialog.FileName), dialog.FileName));
         ShortcutStore.Save(_entries);

@@ -148,15 +148,11 @@
                                 <DropShadowEffect BlurRadius="28" ShadowDepth="8" Direction="270" Opacity="0.22" Color="#6B5B95"/>
                             </Border.Effect>
                             <Grid>
-                                <!-- specular: bright hairline on the top edge, fading down -->
-                                <Border CornerRadius="24" ClipToBounds="True" BorderThickness="1.2">
-                                    <Border.BorderBrush>
-                                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-                                            <GradientStop Color="#CCFFFFFF" Offset="0"/>
-                                            <GradientStop Color="#26FFFFFF" Offset="0.35"/>
-                                            <GradientStop Color="#14FFFFFF" Offset="1"/>
-                                        </LinearGradientBrush>
-                                    </Border.BorderBrush>
+                                <!-- Plain clip, no border stroke: a gradient BorderBrush paints all four
+                                     sides, and a top-to-bottom gradient run down the LEFT/RIGHT edges
+                                     reads as a stray straight line rather than a highlight. The top
+                                     gloss rectangle below gives the same sheen without that side effect. -->
+                                <Border CornerRadius="24" ClipToBounds="True">
                                     <StackPanel Margin="3">
                                         <!-- face pillow: the character's own face (transparent PNG), so the menu reads as Ditto's new shape -->
                                         <Border CornerRadius="18" Background="#33FFFFFF" Height="46" Margin="2,2,2,6">
